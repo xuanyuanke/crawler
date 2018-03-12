@@ -19,7 +19,7 @@ try:
     obj.find_element_by_css_selector('#kw')         #通过css方式定位
     obj.find_element_by_xpath("//input[@id='kw']")  #通过xpath方式定位
     obj.find_element_by_link_text(u"贴吧")           #通过xpath方式定位
-    
+    obj.quit()
     print obj.find_element_by_id('kw').tag_name   #获取标签的类型
 except Exception as e:
     print e

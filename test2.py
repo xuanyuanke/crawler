@@ -20,7 +20,7 @@ link=driver.find_element_by_xpath("//div[@id='3001']/div/h3/a").get_attribute('h
 print("link:"+link)
 js='window.open("'+link+'");'
 driver.execute_script(js)
-
+driver.quit()
 
 # for link in  driver.find_element_by_xpath("//div[@id='3001']/div/h3/a").href
 # 	print (link.get_attribute('href')) 
