@@ -10,4 +10,5 @@ from ToBaidu import *
 ip=str('122.72.18.34:80')
 word=u"美国生孩子"
 baidu = ToBaidu()
-baidu.open(ip,word)
+name="www.angel-usa.com"
+baidu.specifiedOpen(ip,word,name)

@@ -15,7 +15,9 @@ class ToBaidu:
 		# chrome_options.add_argument('--disable-gpu') #谷歌文档提到需要加上这个属性来规避bug
 		# chrome_options.add_argument('--hide-scrollbars') #隐藏滚动条, 应对一些特殊页面
 		# chrome_options.add_argument('blink-settings=imagesEnabled=false') #不加载图片, 提升速度
-		chrome_options.add_argument('--headless') #浏览器不提供可视化页面. linux下如果系统不支持可视化不加这条会启动失败
+		proxy="--proxy-server=http://" + ip
+		addargument['--headless',proxy]
+		# chrome_options.add_argument('--headless') #浏览器不提供可视化页面. linux下如果系统不支持可视化不加这条会启动失败
 		chrome_options.add_argument("--proxy-server=http://" + ip) 
 		driver = webdriver.Chrome('/usr/local/bin/chromedriver')
 		#(executable_path='/usr/local/bin/chromedriver')
@@ -60,3 +62,38 @@ class ToBaidu:
 			print e
 		finally:
 			driver.quit()
+
+	def specifiedOpen(self,ip,word,name):
+			chromeOptions = Options()
+			# chrome_options.add_argument('window-size=1920x3000') #指定浏览器分辨率
+			chromeOptions.add_argument('--disable-gpu') #谷歌文档提到需要加上这个属性来规避bug
+			# chrome_options.add_argument('--hide-scrollbars') #隐藏滚动条, 应对一些特殊页面
+			# chrome_options.add_argument('blink-settings=imagesEnabled=false') #不加载图片, 提升速度
+			# chromeOptions.add_argument('--headless') #浏览器不提供可视化页面. linux下如果系统不支持可视化不加这条会启动失败
+			chromeOptions.add_argument("--proxy-server=http://" + ip) 
+			driver = webdriver.Chrome(chrome_options = chromeOptions)
+			#(executable_path='/usr/local/bin/chromedriver')
+			try:
+				driver.get("https://www.baidu.com")
+				driver.set_page_load_timeout(15)
+				time.sleep(10)
+				driver.find_element_by_id("kw").send_keys(word)
+				driver.find_element_by_id("su").click()
+				time.sleep(5)
+				link=[]
+				index = [1,2,3,4]
+				try:
+					url = driver.find_element_by_partial_link_text(str(name)).get_attribute('href')
+					print url
+					driver.find_element_by_partial_link_text(str(name)).click()
+				except Exception as e:
+					print e
+					print '未检索到推广数据'
+				time.sleep(5)
+				print "页面已打开，准备关闭"
+				driver.quit()
+			except Exception as e:
+				print e
+			finally:
+				print "1111"
+				driver.quit()
