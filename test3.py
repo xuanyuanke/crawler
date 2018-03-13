@@ -10,28 +10,27 @@ chrome_options = Options()
 # chrome_options.add_argument('--disable-gpu') #谷歌文档提到需要加上这个属性来规避bug
 # chrome_options.add_argument('--hide-scrollbars') #隐藏滚动条, 应对一些特殊页面
 # chrome_options.add_argument('blink-settings=imagesEnabled=false') #不加载图片, 提升速度
-chrome_options.add_argument('--headless') #浏览器不提供可视化页面. linux下如果系统不支持可视化不加这条会启动失败
-chrome_options.add_argument(('--proxy-server=http://119.28.152.208:80')) 
+# chrome_options.add_argument('--headless') #浏览器不提供可视化页面. linux下如果系统不支持可视化不加这条会启动失败
+chrome_options.add_argument(('--proxy-server=http://122.72.18.34:80')) 
 
 driver = webdriver.Chrome(r'/usr/local/bin/chromedriver',chrome_options = chrome_options)
-driver.get("https://www.baidu.com")
+driver.get("http://ip.chinaz.com")
 driver.set_page_load_timeout(5)
 try:
-    driver.find_element_by_id("kw").send_keys(u"板蓝根")
-    driver.find_element_by_id("su").click()
+    # driver.find_element_by_id("kw").send_keys(u"板蓝根")
+    # driver.find_element_by_id("su").click()
 
-    time.sleep(4)
+    time.sleep(14)
     print '111111111'
-    if is_element_exist("#3001"):
-		print "无推广数据"
 	# link=driver.find_element_by_xpath("//div[@id='3001']/div/h3/a").get_attribute('href')
 	# if (len(link) ==0):
 	# 	print "元素未找到"
 	# 	return False
-    link = driver.find_element_by_xpath("//div[@id='content_left']/div/h3/a").get_attribute('href')
-    print(link)
-    js='window.open("'+link+'");'
-    driver.execute_script(js)
+    # link = driver.find_element_by_xpath("//div[@id='content_left']/div/h3/a").get_attribute('href')
+    # print(link)
+    # js='window.open("'+link+'");'
+    # driver.execute_script(js)
     driver.quit()
 except Exception as e:
     print e
+    driver.quit()

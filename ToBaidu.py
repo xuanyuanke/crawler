@@ -69,19 +69,17 @@ class ToBaidu:
 			chromeOptions.add_argument('--disable-gpu') #谷歌文档提到需要加上这个属性来规避bug
 			# chrome_options.add_argument('--hide-scrollbars') #隐藏滚动条, 应对一些特殊页面
 			# chrome_options.add_argument('blink-settings=imagesEnabled=false') #不加载图片, 提升速度
-			# chromeOptions.add_argument('--headless') #浏览器不提供可视化页面. linux下如果系统不支持可视化不加这条会启动失败
-			chromeOptions.add_argument("--proxy-server=http://" + ip) 
+			chromeOptions.add_argument('--headless') #浏览器不提供可视化页面. linux下如果系统不支持可视化不加这条会启动失败
+			chromeOptions.add_argument("--proxy-server="+ip) 
 			driver = webdriver.Chrome(chrome_options = chromeOptions)
 			#(executable_path='/usr/local/bin/chromedriver')
 			try:
 				driver.get("https://www.baidu.com")
 				driver.set_page_load_timeout(15)
-				time.sleep(10)
+				# time.sleep(10)
 				driver.find_element_by_id("kw").send_keys(word)
 				driver.find_element_by_id("su").click()
-				time.sleep(5)
-				link=[]
-				index = [1,2,3,4]
+				# time.sleep(5)
 				try:
 					url = driver.find_element_by_partial_link_text(str(name)).get_attribute('href')
 					print url
@@ -95,5 +93,4 @@ class ToBaidu:
 			except Exception as e:
 				print e
 			finally:
-				print "1111"
 				driver.quit()
