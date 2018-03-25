@@ -5,21 +5,19 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
-import sys
 
 import time
 from GetIp import *
-from baidu import *
+from mobile import *
 # from openbaidu import *
 import random 
 
 # IpUtils.saveIp()
 
 words = IpUtils.getWord()
-reload(sys)
-sys.setdefaultencoding('utf-8')
+
 while 1:
-	ip=str(IpUtils.getIp())	 
+	ip=str(IpUtils.getIp())	
 	if ip=='-1':		
 		print 'ip不够了.....'
 
@@ -35,17 +33,17 @@ while 1:
 			wordindex=random.randint(0,len(words))
 			word = words[wordindex]
 			print word
-			name="www.angel-usa.com"	
-			baidu = openbaidu(ip,name,word)
+			name="wap.angel-usa.com"	
+			baidu = ToBaiduMobile(ip,name,word)
 			# baidu.specifiedOpen(ip,word,name)
 			# time.sleep(100000000)
 		except Exception,e:
 				print e		
 				continue
 # word=u"天美极使 京北"
-# name="www.angel-usa.com"	
-# ip=''
+# name="wap.angel-usa.com"	
 # # baidu = openbaidu()
-# baidu = ToBaidu(ip,name,word)
+# ip =''
+# baidu = ToBaiduMobile(ip,name,word)
 
 # baidu.specifiedOpen(ip,word,name)

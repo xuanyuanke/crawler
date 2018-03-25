@@ -7,33 +7,28 @@ import sys
 
 reload(sys)
 sys.setdefaultencoding('utf8')
-class ToBaidu:
+class openbaidu:
 	"""docstring for ClassName"""
-	def getdriver(self,ip):
-		chrome_options = Options()
-		# chrome_options.add_argument('window-size=1920x3000') #指定浏览器分辨率
-		# chrome_options.add_argument('--disable-gpu') #谷歌文档提到需要加上这个属性来规避bug
-		# chrome_options.add_argument('--hide-scrollbars') #隐藏滚动条, 应对一些特殊页面
-		# chrome_options.add_argument('blink-settings=imagesEnabled=false') #不加载图片, 提升速度
-		# proxy="--proxy-server=http://" + ip
-		# addargument['--headless',proxy]
-		chrome_options.add_argument('--headless') #浏览器不提供可视化页面. linux下如果系统不支持可视化不加这条会启动失败
-		chrome_options.add_argument("--proxy-server="+ip) 
-		self.driver = webdriver.Chrome('/usr/local/bin/chromedriver',chrome_options=chrome_options)
-		
-		
-		#(executable_path='/usr/local/bin/chromedriver')
-		return self.driver
-	def open(self,ip,word):
-		driver = self.getdriver(ip)
+	def open(self,ip,word,name):
 		try:
+			chrome_options = Options()
+			# chrome_options.add_argument('window-size=1920x3000') #指定浏览器分辨率
+			# chrome_options.add_argument('--disable-gpu') #谷歌文档提到需要加上这个属性来规避bug
+			# chrome_options.add_argument('--hide-scrollbars') #隐藏滚动条, 应对一些特殊页面
+			# chrome_options.add_argument('blink-settings=imagesEnabled=false') #不加载图片, 提升速度
+			# proxy="--proxy-server=http://" + ip
+			# addargument['--headless',proxy]
+			chrome_options.add_argument('--headless') #浏览器不提供可视化页面. linux下如果系统不支持可视化不加这条会启动失败
+			chrome_options.add_argument("--proxy-server="+ip) 
+			driver = webdriver.Chrome('/usr/local/bin/chromedriver',chrome_options=chrome_options)
 			driver.get("https://www.baidu.com")
 			driver.set_page_load_timeout(5)
 			driver.implicitly_wait(10)  #这里设置智能等待10s
 			driver.set_script_timeout(10)
 			driver.find_element_by_id("kw").send_keys(word)
 			driver.find_element_by_id("su").click()
-			time.sleep(5)
+			# 模拟用户点击，先点击其他的页面
+			time.sleep(10)
 			link=[]
 			index = [1,2,3,4]
 			try:
@@ -64,19 +59,8 @@ class ToBaidu:
 				print js
 				driver.execute_script(js)
 			# driver.close()
+			# 切回到原网页，继续点击
 			time.sleep(3)
-			self.driver = driver
-			return self.driver
-		except Exception as e:
-			print e
-			driver.quit()
-		
-
-	def specifiedOpen(self,ip,word,name):
-			driver= self.driver
-			# driver.delete_all_cookies()
-				#(executable_path='/usr/local/bin/chromedriver')
-			print '1111'
 			try:
 				handles = driver.window_handles
 				driver.switch_to_window(handles[0])
@@ -101,12 +85,10 @@ class ToBaidu:
 			except Exception as e:
 				print e
 				print '异常退出'
-				driver.quit()
-			finally:
-				print '退出'
-				driver.delete_all_cookies()
-				driver.quit()
-		
+		except Exception as e:
+			print e
+		finally:
+			driver.quit()		
 
 	def __init__(self,ip,name,word):
 		# print 1111
@@ -119,12 +101,8 @@ class ToBaidu:
 		self.driver = None
 
 		try:
-			# self.driver = self.getdriver(ip)
-			self.driver = self.open(ip,word)
-			self.specifiedOpen(ip,word,name)
+			self.open(ip,word,name)
 		except Exception as e:
 			print e
-		finally:
-			self.driver.quit()
 		
         # self.specifiedOpen(ip1,word1,name1)

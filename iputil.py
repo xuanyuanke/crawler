@@ -20,7 +20,7 @@ class IpUtils:
 	    'Accept-Language': 'zh-CN,zh;q=0.8',
 	    'User-Agent': 'Mozilla/5.0 (X11; Fedora; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36',
 	    'Hosts': 'hm.baidu.com',
-	    'Referer': 'http://www.xicidaili.com/nn',
+	    'Referer': 'http://www.xicidaili.com/wt',
 	    'Connection': 'keep-alive'
 	}
 	global currentIndex	
@@ -29,16 +29,10 @@ class IpUtils:
 	@staticmethod
 	def  saveIp():
 		print '开始重新拉取ip....'
-		for i in range(1,20):
-		    # url = 'http://www.xicidaili.com/nt/' + str(i)
-		    url = 'http://www.66ip.cn/' + str(i)+'.html'
-		    
+		for i in range(1,1000):
+		    url = 'http://www.xicidaili.com/wt/' + str(i)
 		    req = urllib2.Request(url=url,headers=headers)
-		    try:
-		    	res = urllib2.urlopen(req).read()
-		    except Exception as e:
-		    	continue
-		    
+		    res = urllib2.urlopen(req).read()
 		    # 提取ip和端口
 		    ip_list = re.findall("(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}).*?(\d{2,6})", res, re.S)
 		    # 将提取的ip和端口写入文件
@@ -47,7 +41,7 @@ class IpUtils:
 		        ip = li[0] + ':' + li[1] + '\n'
 		        print ip
 		        f.write(ip)
-		    time.sleep(1)       # 每爬取一页暂停两秒
+		    time.sleep(2)       # 每爬取一页暂停两秒
 		print 'ip已保存完毕:'
 
 	@staticmethod
@@ -85,16 +79,27 @@ class IpUtils:
 			#res = urllib.urlopen(url,proxies=proxys[i]).read()
 			#print '=='+proxys[i]['http']
 			#return 
-			print '开始验证'+proxys[i]['http']
+			# print '开始验证'+proxys[i]['http']
 			res=requests.get(url, proxies=proxys[i],timeout=3)
-			print '验证结果:'+res.text
+			# print '验证结果:'+res.text
 			#valid_ip = proxys[i]['http'][7:]
 			#print 'valid_ip: ' + valid_ip			
 			proxyStr=proxys[i]['http']
 		# ouf.write(valid_ip)
 		except Exception,e:		
-			print '验证失败：'+proxys[i]['http']
-			#print e
+			# print '验证失败：'+proxys[i]['http']
+			# try:
+			# 	# print '验证https：'+proxys[i]['http'].replace('http','https')
+			# 	proxy_temp = {"https":proxys[i]['http'].replace('http','https')}
+			# 	proxys[i] = proxy_temp
+			# 	# print '--------'+str(proxys[i])
+			# 	res=requests.get(url, proxies=proxys[i],timeout=3)
+			# 	# print 'https验证结果:'+res.text
+			# 	#valid_ip = proxys[i]['http'][7:]
+			# 	#print 'valid_ip: ' + valid_ip			
+			# 	proxyStr=proxys[i]['https']
+			# except Exception as e:
+			# 	# print 'https验证失败：'+proxys[i]['https']
 			IpUtils.getIp()
 		else:
 			print '返回 代理Ip==='+proxyStr
@@ -103,9 +108,4 @@ class IpUtils:
 
 		return proxyStr
 
-	@staticmethod
-	def getWord():				
-		inf = open("word.txt")    # 这里打开刚才存ip的文件
-		
-		lines = [line.decode('utf-8') for line in inf.readlines()]
-		return lines
+		# http://221.7.255.168:8080

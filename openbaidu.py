@@ -7,7 +7,7 @@ import sys
 
 reload(sys)
 sys.setdefaultencoding('utf8')
-class ToBaidu:
+class openbaiduMobile:
 	"""docstring for ClassName"""
 	def getdriver(self,ip):
 		chrome_options = Options()
@@ -18,73 +18,71 @@ class ToBaidu:
 		# proxy="--proxy-server=http://" + ip
 		# addargument['--headless',proxy]
 		chrome_options.add_argument('--headless') #浏览器不提供可视化页面. linux下如果系统不支持可视化不加这条会启动失败
-		chrome_options.add_argument("--proxy-server="+ip) 
+		chrome_options.add_argument("--proxy-server=http://" + ip) 
 		self.driver = webdriver.Chrome('/usr/local/bin/chromedriver',chrome_options=chrome_options)
-		
-		
-		#(executable_path='/usr/local/bin/chromedriver')
 		return self.driver
-	def open(self,ip,word):
-		driver = self.getdriver(ip)
-		try:
-			driver.get("https://www.baidu.com")
-			driver.set_page_load_timeout(5)
-			driver.implicitly_wait(10)  #这里设置智能等待10s
-			driver.set_script_timeout(10)
-			driver.find_element_by_id("kw").send_keys(word)
-			driver.find_element_by_id("su").click()
-			time.sleep(5)
-			link=[]
-			index = [1,2,3,4]
+		#(executable_path='/usr/local/bin/chromedriver')
+		
+	def openword(self,word):
 			try:
-				for i in range(0, len(index)):
-					print index[i]
-					xpath = "//div[@id='content_left']/div["+str(index[i])+"]/h3/a"
-					print xpath
-					try:
-						link_d=driver.find_element_by_xpath(xpath).get_attribute('href')
-					except Exception as e:
-						print e
-						print '尝试第二种方式'
-						xpath = "//div[@id='content_left']/div["+str(index[i])+"]/div/h3/a"
-						link_d=driver.find_element_by_xpath(xpath).get_attribute('href')
-					# link=driver.find_element_by_xpath("//div[@id='3001']/div/h3/a").get_attribute('href')
-					# 
-					link.append(link_d)
+				driver = self.driver
+				driver.get("https://www.baidu.com")
+				# driver.set_page_load_timeout(5)
+				driver.implicitly_wait(10) # 隐性等待，最长等30秒 
+				driver.set_page_load_timeout(15)
+				driver.find_element_by_id("kw").send_keys(word)
+				driver.find_element_by_id("su").click()
+				
+				time.sleep(5)
+				# return driver
+				link=[]
+				index = [1,2,3,4]
+				try:
+					for i in range(0, len(index)):
+						print index[i]
+						xpath = "//div[@id='content_left']/div["+str(index[i])+"]/h3/a"
+						print xpath
+						try:
+							link_d=self.driver.find_element_by_xpath(xpath).get_attribute('href')
+						except Exception as e:
+							print e
+							print '尝试第二种方式'
+							xpath = "//div[@id='content_left']/div["+str(index[i])+"]/div/h3/a"
+							try:
+								link_d=driver.find_element_by_xpath(xpath).get_attribute('href')
+							except Exception as e:
+						link.append(link_d)
+				except Exception as e:
+					print e
+					print '未检索到推广数据'
+					
+					# driver.quit()
+				if len(link) == 0:
+					print "元素未找到"
+				for url in link:
+					print("url:"+url)
+					js='window.open("'+url+'");'
+					print js
+					driver.execute_script(js)
+					time.sleep(3)
+				return driver
 			except Exception as e:
 				print e
-				print '未检索到推广数据'
-				
-				# driver.quit()
-			if len(link) == 0:
-				print "元素未找到"
-			for url in link:
-				print("url:"+url)
-				js='window.open("'+url+'");'
-				print js
-				driver.execute_script(js)
-			# driver.close()
-			time.sleep(3)
-			self.driver = driver
-			return self.driver
-		except Exception as e:
-			print e
-			driver.quit()
-		
+			finally:
+				driver.quit()
+			
 
 	def specifiedOpen(self,ip,word,name):
-			driver= self.driver
-			# driver.delete_all_cookies()
-				#(executable_path='/usr/local/bin/chromedriver')
-			print '1111'
+			driver = self.driver
 			try:
 				handles = driver.window_handles
 				driver.switch_to_window(handles[0])
-				# driver.execute_script(js)
-				# cookie= driver.get_cookies()
+				driver.implicitly_wait(10) # 隐性等待，最长等30秒 
+				driver.set_page_load_timeout(15)
 				driver.find_element_by_id("kw").clear()
 				driver.find_element_by_id("kw").send_keys(word)
 				driver.find_element_by_id("su").click()
+				# time.sleep(5)
 				try:
 					url = driver.find_element_by_partial_link_text(str(name)).get_attribute('href')
 					print url
@@ -105,26 +103,18 @@ class ToBaidu:
 			finally:
 				print '退出'
 				driver.delete_all_cookies()
-				driver.quit()
-		
+				driver.quit()	
 
-	def __init__(self,ip,name,word):
+	def __init__(self):
 		# print 1111
-		# word=u"美国生孩子"
-		# word1 = u"天美极使 京北"
-		# name="www.angel-usa.com"	
+		ip="192.168.1.1"
+		word=u"美国生孩子"
+		name="www.angel-usa.com"	
 		# baidu = ToBaidu()
-		# print '1111s
-
+		# print '1111'
 		self.driver = None
-
-		try:
-			# self.driver = self.getdriver(ip)
-			self.driver = self.open(ip,word)
-			self.specifiedOpen(ip,word,name)
-		except Exception as e:
-			print e
-		finally:
-			self.driver.quit()
-		
+		self.driver = self.getdriver(ip)
+		self.driver = self.openword(word)
+		# self.driver = self.openword(word,name)
+		self.specifiedOpen(ip,word,name)
         # self.specifiedOpen(ip1,word1,name1)
