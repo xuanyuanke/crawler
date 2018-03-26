@@ -14,8 +14,8 @@ import random
 
 # IpUtils.saveIp()
 
-words = IpUtils.getWord()
-
+words = IpUtils.getWord("word.txt")
+unwords = IpUtils.getWord("unword.txt")
 while 1:
 	ip=str(IpUtils.getIp())	
 	if ip=='-1':		
@@ -33,8 +33,10 @@ while 1:
 			wordindex=random.randint(0,len(words))
 			word = words[wordindex]
 			print word
-			name="wap.angel-usa.com"	
-			baidu = ToBaiduMobile(ip,name,word)
+			name="vip.angel-usa.com"
+			unwordindex = random.randint(0,len(unwords))
+			unword = unwords[wordindex]	
+			baidu = ToBaiduMobile(ip,name,word,unword)
 			# baidu.specifiedOpen(ip,word,name)
 			# time.sleep(100000000)
 		except Exception,e:

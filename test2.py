@@ -3,23 +3,30 @@
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
 import time
+import urllib2
+import re
+import urllib
+import socket
+import requests
+import telnetlib
+import sys
 
 driver = webdriver.Chrome('/usr/local/bin/chromedriver')
 #(executable_path='/usr/local/bin/chromedriver')
-driver.get("https://www.baidu.com")
+driver.get("http://tvp.daxiangdaili.com/ip/?tid=555447088680131&num=10000&delay=1&filter=on")
 driver.set_page_load_timeout(5)
 #print(driver)
 #driver.quit()
-driver.find_element_by_id("kw").send_keys(u"美国生孩子")
-driver.find_element_by_id("su").click()
+# driver.find_element_by_id("kw").send_keys(u"美国生孩子")
+# driver.find_element_by_id("su").click()
 #driver.switch_to_window(driver.window_handles[-1])
 # driver.set_page_load_timeout(5)
 # print (driver.find_element_by_id("3001").text)
-time.sleep(5)
-link=driver.find_element_by_xpath("//div[@id='3001']/div/h3/a").get_attribute('href')
-print("link:"+link)
-js='window.open("'+link+'");'
-driver.execute_script(js)
+link=driver.find_element_by_tag_name("pre").text
+print link
+f = open("ip.txt","a")
+f.write(link)
+f.write("\n")
 driver.quit()
 
 # for link in  driver.find_element_by_xpath("//div[@id='3001']/div/h3/a").href

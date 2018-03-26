@@ -12,7 +12,7 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 class ToBaiduMobile:
 	"""docstring for ClassName"""
-	def open(self,ip,word,hrefname):
+	def open(self,ip,word,hrefname,unword):
 		chrome_options =webdriver.ChromeOptions()
 		UA = 'iPad / Safari 10.3 [Mobile]: Mozilla/5.0 (iPad; CPU OS 10_3_3 like Mac OS X) AppleWebKit/603.3.3 (KHTML, like Gecko) Version/10.0 Mobile/14G5037b Safari/602.1'
 		UA ='Android Tablet / Chrome 57 [Mobile]: Mozilla/5.0 (Linux; Android 4.4.4; Lenovo TAB 2 A10-70L Build/KTU84P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.132 Safari/537.36'
@@ -38,10 +38,11 @@ class ToBaiduMobile:
 			print '第一个窗口'+str(e)
 		
 		time.sleep(5)
+		WebDriverWait(driver, 40).until(lambda x: x.driver.find_element_by_id("index-kw"))
 		try:
 			handles = driver.window_handles
 			driver.switch_to_window(handles[0])
-			driver.find_element_by_id("index-kw").send_keys(word)
+			driver.find_element_by_id("index-kw").send_keys(unword)
 			time.sleep(2)
 			driver.find_element_by_id("index-bn").click()
 			# time.sleep(5)
@@ -151,7 +152,7 @@ class ToBaiduMobile:
 				# driver.quit()
 		
 
-	def __init__(self,ip,name,word):
+	def __init__(self,ip,name,word,unword):
 		# print 1111
 		# word=u"美国生孩子"
 		# word1 = u"天美极使 京北"
@@ -163,7 +164,7 @@ class ToBaiduMobile:
 
 		try:
 			# self.driver = self.getdriver(ip)
-			self.driver = self.open(ip,word,name)
+			self.driver = self.open(ip,word,name,unword)
 			# self.specifiedOpen(ip,word,name)
 		except Exception as e:
 			print e

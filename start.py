@@ -15,14 +15,15 @@ import random
 
 # IpUtils.saveIp()
 
-words = IpUtils.getWord()
+words = IpUtils.getWord("word.txt")
+unwords = IpUtils.getWord("unword.txt")
 reload(sys)
 sys.setdefaultencoding('utf-8')
 while 1:
 	ip=str(IpUtils.getIp())	 
 	if ip=='-1':		
 		print 'ip不够了.....'
-
+		time.sleep(2)
 		try:
 			IpUtils.saveIp()
 		except Exception as e:
@@ -35,13 +36,16 @@ while 1:
 			wordindex=random.randint(0,len(words))
 			word = words[wordindex]
 			print word
-			name="www.angel-usa.com"	
-			baidu = openbaidu(ip,name,word)
+			name="www.angel-usa.com"
+			unwordindex = random.randint(0,len(unwords))
+			unword = unwords[unwordindex]
+			baidu = openbaidu(ip,name,word,unword)
 			# baidu.specifiedOpen(ip,word,name)
 			# time.sleep(100000000)
 		except Exception,e:
 				print e		
 				continue
+
 # word=u"天美极使 京北"
 # name="www.angel-usa.com"	
 # ip=''

@@ -23,14 +23,14 @@ class openbaiduMobile:
 		return self.driver
 		#(executable_path='/usr/local/bin/chromedriver')
 		
-	def openword(self,word):
+	def openword(self,unword):
 			try:
 				driver = self.driver
 				driver.get("https://www.baidu.com")
 				# driver.set_page_load_timeout(5)
 				driver.implicitly_wait(10) # 隐性等待，最长等30秒 
 				driver.set_page_load_timeout(15)
-				driver.find_element_by_id("kw").send_keys(word)
+				driver.find_element_by_id("kw").send_keys(unword)
 				driver.find_element_by_id("su").click()
 				
 				time.sleep(5)

@@ -8,6 +8,9 @@ import socket
 import requests
 import telnetlib
 import sys
+from selenium import webdriver
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.chrome.options import Options
 
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -28,27 +31,27 @@ class IpUtils:
 	# 指定爬取范围（这里是第1~1000页）
 	@staticmethod
 	def  saveIp():
-		print '开始重新拉取ip....'
-		for i in range(1,20):
-		    # url = 'http://www.xicidaili.com/nt/' + str(i)
-		    url = 'http://www.66ip.cn/' + str(i)+'.html'
-		    
-		    req = urllib2.Request(url=url,headers=headers)
-		    try:
-		    	res = urllib2.urlopen(req).read()
-		    except Exception as e:
-		    	continue
-		    
-		    # 提取ip和端口
-		    ip_list = re.findall("(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}).*?(\d{2,6})", res, re.S)
-		    # 将提取的ip和端口写入文件
-		    f = open("ip.txt","w")
-		    for li in ip_list:
-		        ip = li[0] + ':' + li[1] + '\n'
-		        print ip
-		        f.write(ip)
-		    time.sleep(1)       # 每爬取一页暂停两秒
-		print 'ip已保存完毕:'
+		try:
+			print '开始重新拉取ip....'
+			chrome_options =webdriver.ChromeOptions()
+			chrome_options.add_argument('--headless')
+			driver = webdriver.Chrome('/usr/local/bin/chromedriver',chrome_options=chrome_options)
+			#(executable_path='/usr/local/bin/chromedriver')
+			driver.get("http://tvp.daxiangdaili.com/ip/?tid=555447088680131&num=10000&delay=1&filter=on")
+			driver.set_page_load_timeout(5)
+			link=driver.find_element_by_tag_name("pre").text
+			print link
+			f = open("ip.txt","w")
+			f.write(link)
+			# f.write("\n")
+			driver.quit()
+			time.sleep(1) 
+			print 'ip已保存完毕:'
+
+		except Exception as e:
+			print e
+			print '错误'
+		
 
 	@staticmethod
 	def getIp():				
@@ -104,8 +107,8 @@ class IpUtils:
 		return proxyStr
 
 	@staticmethod
-	def getWord():				
-		inf = open("word.txt")    # 这里打开刚才存ip的文件
+	def getWord(wordfile):				
+		inf = open(wordfile) 
 		
 		lines = [line.decode('utf-8') for line in inf.readlines()]
 		return lines

@@ -2,6 +2,9 @@
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.common.by import By
 import time
 import sys
 
@@ -9,7 +12,7 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 class openbaidu:
 	"""docstring for ClassName"""
-	def open(self,ip,word,name):
+	def open(self,ip,word,name,unword):
 		try:
 			chrome_options = Options()
 			# chrome_options.add_argument('window-size=1920x3000') #指定浏览器分辨率
@@ -18,14 +21,15 @@ class openbaidu:
 			# chrome_options.add_argument('blink-settings=imagesEnabled=false') #不加载图片, 提升速度
 			# proxy="--proxy-server=http://" + ip
 			# addargument['--headless',proxy]
-			chrome_options.add_argument('--headless') #浏览器不提供可视化页面. linux下如果系统不支持可视化不加这条会启动失败
+			# chrome_options.add_argument('--headless') #浏览器不提供可视化页面. linux下如果系统不支持可视化不加这条会启动失败
 			chrome_options.add_argument("--proxy-server="+ip) 
 			driver = webdriver.Chrome('/usr/local/bin/chromedriver',chrome_options=chrome_options)
 			driver.get("https://www.baidu.com")
-			driver.set_page_load_timeout(5)
-			driver.implicitly_wait(10)  #这里设置智能等待10s
-			driver.set_script_timeout(10)
-			driver.find_element_by_id("kw").send_keys(word)
+			driver.set_page_load_timeout(20)
+			driver.implicitly_wait(20)  #这里设置智能等待10s
+			driver.set_script_timeout(20)
+			WebDriverWait(driver, 30).until(lambda x: x.find_element_by_id("kw"))
+			driver.find_element_by_id("kw").send_keys(unword)
 			driver.find_element_by_id("su").click()
 			# 模拟用户点击，先点击其他的页面
 			time.sleep(10)
@@ -38,11 +42,13 @@ class openbaidu:
 					print xpath
 					try:
 						link_d=driver.find_element_by_xpath(xpath).get_attribute('href')
+						time.sleep(1)
 					except Exception as e:
 						print e
 						print '尝试第二种方式'
 						xpath = "//div[@id='content_left']/div["+str(index[i])+"]/div/h3/a"
 						link_d=driver.find_element_by_xpath(xpath).get_attribute('href')
+						time.sleep(1)
 					# link=driver.find_element_by_xpath("//div[@id='3001']/div/h3/a").get_attribute('href')
 					# 
 					link.append(link_d)
@@ -90,7 +96,7 @@ class openbaidu:
 		finally:
 			driver.quit()		
 
-	def __init__(self,ip,name,word):
+	def __init__(self,ip,name,word,unword):
 		# print 1111
 		# word=u"美国生孩子"
 		# word1 = u"天美极使 京北"
@@ -101,7 +107,7 @@ class openbaidu:
 		self.driver = None
 
 		try:
-			self.open(ip,word,name)
+			self.open(ip,word,name,unword)
 		except Exception as e:
 			print e
 		
