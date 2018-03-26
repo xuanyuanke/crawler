@@ -7,15 +7,15 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 
 import time
-from GetIp import *
-from mobile import *
+from util.GetIp import *
+from baidu.mobile import *
 # from openbaidu import *
 import random 
 
 # IpUtils.saveIp()
 
-words = IpUtils.getWord("word.txt")
-unwords = IpUtils.getWord("unword.txt")
+words = IpUtils.getWord("baidu/word.txt")
+unwords = IpUtils.getWord("baidu/unword.txt")
 while 1:
 	ip=str(IpUtils.getIp())	
 	if ip=='-1':		

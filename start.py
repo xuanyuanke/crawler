@@ -8,15 +8,15 @@ from selenium.webdriver.common.by import By
 import sys
 
 import time
-from GetIp import *
-from baidu import *
+from util.GetIp import *
+from baidu.baidu import *
 # from openbaidu import *
 import random 
 
 # IpUtils.saveIp()
 
-words = IpUtils.getWord("word.txt")
-unwords = IpUtils.getWord("unword.txt")
+words = IpUtils.getWord("baidu/word.txt")
+unwords = IpUtils.getWord("baidu/unword.txt")
 reload(sys)
 sys.setdefaultencoding('utf-8')
 while 1:

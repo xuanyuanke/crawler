@@ -41,7 +41,7 @@ class IpUtils:
 			driver.set_page_load_timeout(5)
 			link=driver.find_element_by_tag_name("pre").text
 			print link
-			f = open("ip.txt","w")
+			f = open("util/ip.txt","w")
 			f.write(link)
 			# f.write("\n")
 			driver.quit()
@@ -55,7 +55,7 @@ class IpUtils:
 
 	@staticmethod
 	def getIp():				
-		inf = open("ip.txt")    # 这里打开刚才存ip的文件
+		inf = open("util/ip.txt")    # 这里打开刚才存ip的文件
 		lines = inf.readlines()
 		proxys = []
 		for i in range(0,len(lines)):
