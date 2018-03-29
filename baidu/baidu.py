@@ -22,7 +22,9 @@ class openbaidu:
 			# proxy="--proxy-server=http://" + ip
 			# addargument['--headless',proxy]
 			# chrome_options.add_argument('--headless') #浏览器不提供可视化页面. linux下如果系统不支持可视化不加这条会启动失败
-			chrome_options.add_argument("--proxy-server="+ip) 
+			proxyStr = "--proxy-server="+ip
+			print ('baidu prox =', proxyStr)
+			chrome_options.add_argument(proxyStr) 
 			driver = webdriver.Chrome('/usr/local/bin/chromedriver',chrome_options=chrome_options)
 			driver.get("https://www.baidu.com")
 			driver.set_page_load_timeout(20)
