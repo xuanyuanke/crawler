@@ -9,20 +9,19 @@ from pyquery import PyQuery as pq
 import time
 import sys
 sys.path.append("../../")
-import util.DbReboot as Reboot
-from util.StringUtil import *
+import util.TulingReboot as Reboot
+import util.StringUtil as StringUtil
 reload(sys)
 sys.setdefaultencoding('utf8')
 
 
-class BaiduSayHello:
+class KuaiShangSayHello:
     global windowCount
     windowCount = 0
 
     def hello(sa, ip):
-        global windowCount
-        windowCount = 0
         # while 1:
+        global windowCount
         windowCount += 1
         print '打开窗口:' + str(windowCount)
         chromeOptions = webdriver.ChromeOptions()
@@ -30,20 +29,36 @@ class BaiduSayHello:
         # 一定要注意，=两边不能有空格，不能是这样--proxy-server = http://202.20.16.82:10152
         proxyStr = "--proxy-server=" + ip
         print ('baidu prox =', proxyStr)
+        prefs = {
+            'profile.default_content_setting_values': {
+                'images': 2
+            }
+        }
+        chromeOptions.add_experimental_option('prefs', prefs)
         chromeOptions.add_argument(proxyStr)
 
         driver = webdriver.Chrome(chrome_options=chromeOptions)
 
+        # driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(10))
+
+        # driver.set_timeout(30)
+        # driver.implicitly_wait(30)
+        driver.set_page_load_timeout(30)
+        driver.set_script_timeout(30)
+
+        url = "http://kf9.kuaishang.cn/bs/im.htm?cas=55798___737336&fi=64318&dp=http://www.abcbabyvip.com/"
         try:
-            driver.get(
-                "http://p.qiao.baidu.com//im/index?siteid=7956642&ucid=7729658")
+            driver.get(url)
         except Exception, e:
-            print '加载会话错误。。关闭窗口'
+            print '加载会话ee。关闭窗口'
+            print e
             try:
-                driver.quit()
+                print '等待会话.ex.10'
+                # driver.quit()
             except Exception, e:
-                print '关闭窗口错误...'
-            return
+                print e
+            # return
+            time.sleep(10)
         print '窗口已打开'
         # 获取打开的多个窗口句柄
         #windows = driver.window_handles
@@ -52,7 +67,9 @@ class BaiduSayHello:
         i = 0
         sessionTime = 0
         lastMsg = ''
+        errorCount = 0
         while 1:
+            errorCount += 1
             i = 5
             print '当前会话时间：(' + str(sessionTime) + ')'
             sessionTime += i
@@ -61,22 +78,26 @@ class BaiduSayHello:
                 d = pq(driver.page_source)
                 time.sleep(i)
             except Exception, e:
+                if errorCount > 3:
+                    driver.quit()
+                    return
                 print e
                 continue
-            lastContent = d('.msg-sub:last .title').text();
+            lastContent = d('.msg_cs:last .msg').text();
             if lastMsg != lastContent:
                 lastMsg = lastContent
-                print '有新的客户消息。。。'
+                print '有新的客户消息:'
                 print '客服说：' + lastContent
-                reboot = Reboot.DbReboot()
-                tulingSayMsg = reboot.robootSay(lastContent)
-                addWeixin = False
-                if sessionTime > 60:
-                    tulingSayMsg = '您加我微信详聊吧 ：' + MyUtil.createPhone()
-                    addWeixin = True
+                #reboot = Reboot.TulingReboot()
+                #tulingSayMsg = reboot.robootSay(lastContent)
+                #addWeixin = False
+                # if sessionTime > 1:
+                tulingSayMsg = '我手机,同微信 ：' + StringUtil.MyUtil.createPhone()
+                addWeixin = True
+                print '回复：' + tulingSayMsg
                 driver.execute_script(
-                    "document.getElementById('editor').innerHTML='" + tulingSayMsg + "'")
-                send = driver.find_element_by_id('send-wrap')
+                    "document.getElementById('ksEditInstance').innerHTML='" + tulingSayMsg + "'")
+                send = driver.find_element_by_id('ksDirSendBtn')
                 send.click()
                 if addWeixin:
                     time.sleep(i)
@@ -84,8 +105,13 @@ class BaiduSayHello:
                     driver.quit()
                     break
             else:
-                if sessionTime > 300:
-                    print '回话超过5分钟 关闭当前会话..'
+                if sessionTime > 100:
+                    print '回话超过3分钟 , 发送手机号 关闭当前会话..'
+                    tulingSayMsg = '我手机,同微信 ：' + StringUtil.MyUtil.createPhone()
+                    driver.execute_script(
+                        "document.getElementById('ksEditInstance').innerHTML='" + tulingSayMsg + "'")
+                    send = driver.find_element_by_id('ksDirSendBtn')
+                    send.click()
                     driver.quit()
                     break
                     # continue

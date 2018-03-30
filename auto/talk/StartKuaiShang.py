@@ -12,7 +12,7 @@ sys.path.append("../../")
 import util.TulingReboot as tuling
 from util.StringUtil import *
 from util.IpUtil import *
-from auto.talk.BaiduSayHello import *
+from KuaiShangSayHello import *
 
 # IpUtils.saveIp()
 while 1:
@@ -20,10 +20,11 @@ while 1:
     if ip == '-1':
         print 'ip不够了.....'
         IpUtils.saveIp()
-    elif ip:
+    elif ip and ip != 'None':
         print 'ip：' + ip + ' 打开'
         try:
-            say = BaiduSayHello()
+            say = KuaiShangSayHello()
             say.hello(ip)
         except Exception, e:
+            print e
             continue
