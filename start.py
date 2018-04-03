@@ -8,7 +8,7 @@ from selenium.webdriver.common.by import By
 import sys
 
 import time
-from util.GetIp import *
+from util.IpUtil import *
 from baidu.baidu import *
 # from openbaidu import *
 import random 

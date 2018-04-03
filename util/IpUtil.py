@@ -44,7 +44,10 @@ class IpUtils:
         try:
             print '开始重新拉取ip....'
             chrome_options = webdriver.ChromeOptions()
-            chrome_options.add_argument('--headless')
+            chrome_options.add_argument('--disable-extensions')
+            chrome_options.add_argument('--disable-gpu')
+            chrome_options.add_argument('--no-sandbox')
+            chrome_options.add_argument('--headless') #浏览器不提供可视化页面. linux下如果系统不支持可视化不加这条会启动失败
             #driver = webdriver.Chrome('/usr/local/bin/chromedriver',chrome_options=chrome_options)
             driver = webdriver.Chrome(chrome_options=chrome_options)
             #(executable_path='/usr/local/bin/chromedriver')

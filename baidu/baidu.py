@@ -21,7 +21,10 @@ class openbaidu:
 			# chrome_options.add_argument('blink-settings=imagesEnabled=false') #不加载图片, 提升速度
 			# proxy="--proxy-server=http://" + ip
 			# addargument['--headless',proxy]
-			# chrome_options.add_argument('--headless') #浏览器不提供可视化页面. linux下如果系统不支持可视化不加这条会启动失败
+			chrome_options.add_argument('--disable-extensions')
+			chrome_options.add_argument('--disable-gpu')
+			chrome_options.add_argument('--no-sandbox')
+			chrome_options.add_argument('--headless') #浏览器不提供可视化页面. linux下如果系统不支持可视化不加这条会启动失败
 			proxyStr = "--proxy-server="+ip
 			print ('baidu prox =', proxyStr)
 			chrome_options.add_argument(proxyStr) 
@@ -50,7 +53,7 @@ class openbaidu:
 						print '尝试第二种方式'
 						xpath = "//div[@id='content_left']/div["+str(index[i])+"]/div/h3/a"
 						link_d=driver.find_element_by_xpath(xpath).get_attribute('href')
-						time.sleep(1)
+						
 					# link=driver.find_element_by_xpath("//div[@id='3001']/div/h3/a").get_attribute('href')
 					# 
 					link.append(link_d)
@@ -66,6 +69,7 @@ class openbaidu:
 				js='window.open("'+url+'");'
 				print js
 				driver.execute_script(js)
+				time.sleep(2)
 			# driver.close()
 			# 切回到原网页，继续点击
 			time.sleep(3)
@@ -81,10 +85,12 @@ class openbaidu:
 					url = driver.find_element_by_partial_link_text(str(name)).get_attribute('href')
 					print url
 					driver.find_element_by_partial_link_text(str(name)).click()
-					print '==========OK========='
+					print('PC执行成功ip[%s]word[%s]name[%s]unword[%s] :' % (ip,word,name,unword))
+					 
 				except Exception as e:
 					print e
 					print '未检索到推广数据'
+					driver.delete_all_cookies()
 					driver.quit()
 				# time.sleep(5)
 				driver.delete_all_cookies()

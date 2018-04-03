@@ -15,7 +15,7 @@ class ToBaiduMobile:
 	def open(self,ip,word,hrefname,unword):
 		chrome_options =webdriver.ChromeOptions()
 		UA = 'iPad / Safari 10.3 [Mobile]: Mozilla/5.0 (iPad; CPU OS 10_3_3 like Mac OS X) AppleWebKit/603.3.3 (KHTML, like Gecko) Version/10.0 Mobile/14G5037b Safari/602.1'
-		UA ='Android Tablet / Chrome 57 [Mobile]: Mozilla/5.0 (Linux; Android 4.4.4; Lenovo TAB 2 A10-70L Build/KTU84P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.132 Safari/537.36'
+		#UA ='Android Tablet / Chrome 57 [Mobile]: Mozilla/5.0 (Linux; Android 4.4.4; Lenovo TAB 2 A10-70L Build/KTU84P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.132 Safari/537.36'
 		mobileEmulation = {"userAgent": UA}
 
 		# mobileEmulation = {"deviceName":"Google Nexus 5"}  
@@ -26,18 +26,21 @@ class ToBaiduMobile:
 		# chrome_options.add_argument('blink-settings=imagesEnabled=false') #不加载图片, 提升速度
 		# proxy="--proxy-server=http://" + ip
 		# addargument['--headless',proxy]
+		chrome_options.add_argument('--disable-extensions')
+        chrome_options.add_argument('--disable-gpu')
+        chrome_options.add_argument('--no-sandbox')
 		chrome_options.add_argument('--headless') #浏览器不提供可视化页面. linux下如果系统不支持可视化不加这条会启动失败
 		chrome_options.add_argument("--proxy-server="+ip) 
 		driver = webdriver.Chrome('/usr/local/bin/chromedriver',chrome_options=chrome_options)
 		
 		driver.set_page_load_timeout(20)
-		driver.set_script_timeout(10)
+		driver.set_script_timeout(20)
 		try:
 			driver.get("https://m.baidu.com")
 		except Exception as e:
 			print '第一个窗口'+str(e)
 		
-		time.sleep(5)
+		time.sleep(15)
 		WebDriverWait(driver, 40).until(lambda x: x.driver.find_element_by_id("index-kw"))
 		try:
 			handles = driver.window_handles
@@ -48,8 +51,9 @@ class ToBaiduMobile:
 			# time.sleep(5)
 			
 		except Exception as e:
-			print '1111'
+			print '打开百度窗口异常'
 			print e
+			driver.quit()
 		try:
 			link=[]
 			index = [1,2]
@@ -78,7 +82,7 @@ class ToBaiduMobile:
 					js='window.open("'+url+'");'
 					# print js
 					driver.execute_script(js)
-					time.sleep(1)
+					time.sleep(2)
 			else:
 				print "元素未找到"
 			# 切回到初始页面
@@ -101,16 +105,18 @@ class ToBaiduMobile:
 					js='window.open("'+url+'");'
 					# print js
 					driver.execute_script(js)
-				print '==========OK========='
+				print('PC执行成功ip[%s]word[%s]name[%s]unword[%s] :' % (ip,word,hrefname,unword))
 			except Exception as e:
 				print e
 				print '未检索到推广数据'
 			# driver.close()
 			time.sleep(3)
+			driver.delete_all_cookies()
 			self.driver = driver
 			return self.driver
 		except Exception as e:
 			print e
+			driver.delete_all_cookies()
 			driver.quit()
 		
 
@@ -165,6 +171,7 @@ class ToBaiduMobile:
 		try:
 			# self.driver = self.getdriver(ip)
 			self.driver = self.open(ip,word,name,unword)
+			self.driver.delete_all_cookies()
 			# self.specifiedOpen(ip,word,name)
 		except Exception as e:
 			print e
