@@ -29,10 +29,16 @@ class openbaidu:
 			print ('baidu prox =', proxyStr)
 			chrome_options.add_argument(proxyStr) 
 			driver = webdriver.Chrome('/usr/local/bin/chromedriver',chrome_options=chrome_options)
-			driver.get("https://www.baidu.com")
-			driver.set_page_load_timeout(20)
-			driver.implicitly_wait(20)  #这里设置智能等待10s
-			driver.set_script_timeout(20)
+			driver.set_page_load_timeout(30)
+			driver.implicitly_wait(30)  #这里设置智能等待10s
+			driver.set_script_timeout(30)
+			issleep=False
+			try:
+				driver.get("https://www.baidu.com")
+			except Exception as e:
+				print e
+				issleep=True
+				time.sleep(30)
 			WebDriverWait(driver, 30).until(lambda x: x.find_element_by_id("kw"))
 			driver.find_element_by_id("kw").send_keys(unword)
 			driver.find_element_by_id("su").click()
@@ -81,6 +87,8 @@ class openbaidu:
 				driver.find_element_by_id("kw").clear()
 				driver.find_element_by_id("kw").send_keys(word)
 				driver.find_element_by_id("su").click()
+				if issleep :
+					time.sleep(30)
 				try:
 					url = driver.find_element_by_partial_link_text(str(name)).get_attribute('href')
 					print url
