@@ -19,7 +19,7 @@ class ToBaiduMobile:
 		mobileEmulation = {"userAgent": UA}
 
 		# mobileEmulation = {"deviceName":"Google Nexus 5"}  
-		# chrome_options.add_experimental_option('mobileEmulation', mobileEmulation)
+		chrome_options.add_experimental_option('mobileEmulation', mobileEmulation)
 		# chrome_options.add_argument('window-size=1920x3000') #指定浏览器分辨率
 		# chrome_options.add_argument('--disable-gpu') #谷歌文档提到需要加上这个属性来规避bug
 		# chrome_options.add_argument('--hide-scrollbars') #隐藏滚动条, 应对一些特殊页面
@@ -139,7 +139,8 @@ class ToBaiduMobile:
 					url = driver.find_element_by_partial_link_text(str(name)).get_attribute('href')
 					print url
 					driver.find_element_by_partial_link_text(str(name)).click()
-					print '==========OK========='
+					print('PC执行成功ip[%s]word[%s]name[%s]:' % (ip,word,hrefname))
+					time.sleep(30)
 				except Exception as e:
 					print e
 					print '未检索到推广数据'

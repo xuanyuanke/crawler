@@ -32,13 +32,10 @@ while 1:
 	else:
 		print 'ip：'+ip+' 打开'		
 		try:
-			# word=u"天美极使 京北"
-			wordindex=random.randint(0,len(words))
-			word = words[wordindex]
+			word=random.choice(words)
 			print word
 			name="www.angel-usa.com"
-			unwordindex = random.randint(0,len(unwords))
-			unword = unwords[unwordindex]
+			unword = random.choice(unwords)
 			baidu = openbaidu(ip,name,word,unword)
 			# baidu.specifiedOpen(ip,word,name)
 			# time.sleep(100000000)
