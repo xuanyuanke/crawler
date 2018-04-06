@@ -117,10 +117,12 @@ class IpUtils:
             # return
             print '开始验证' + proxys[i]['http']
             res = requests.get(url, proxies=proxys[i],headers=headers, timeout=5)
-            print '验证成功' 
-            #valid_ip = proxys[i]['http'][7:]
-            # print 'valid_ip: ' + valid_ip
-            proxyStr = proxys[i]['http']
+            if res.status_code == 200:
+                print '验证成功' 
+                proxyStr = proxys[i]['http']
+            else:
+                IpUtils.getIp()
+            
         # ouf.write(valid_ip)
         except Exception, e:
             print '验证失败：' + proxys[i]['http']

@@ -7,7 +7,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 
 import time
-from util.GetIp import *
+from util.IpUtil import *
 from baidu.mobile import *
 # from openbaidu import *
 import random 
@@ -30,12 +30,12 @@ while 1:
 		print 'ip：'+ip+' 打开'		
 		try:
 			# word=u"天美极使 京北"
-			wordindex=random.randint(0,len(words))
-			word = words[wordindex]
+			word=random.choice(words)
+			# word = words[wordindex]
 			print word
-			name="vip.angel-usa.com"
-			unwordindex = random.randint(0,len(unwords))
-			unword = unwords[wordindex]	
+			name="wap.angel-usa.com"
+			unword = random.choice(unwords)
+			# unword = unwords[wordindex]	
 			baidu = ToBaiduMobile(ip,name,word,unword)
 			# baidu.specifiedOpen(ip,word,name)
 			# time.sleep(100000000)

@@ -98,7 +98,7 @@ class openbaidu:
 					url = driver.find_element_by_partial_link_text(str(name)).get_attribute('href')
 					print url
 					driver.find_element_by_partial_link_text(str(name)).click()
-					print('PC执行成功ip[%s]word[%s]name[%s]unword[%s] :' % (ip,word,name,unword))
+					print('[%s]-PC执行成功ip[%s]word[%s]name[%s]unword[%s] :' % (time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())),ip,word,name,unword))
 					time.sleep(30)
 				except Exception as e:
 					print e
