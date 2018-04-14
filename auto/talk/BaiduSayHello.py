@@ -10,21 +10,25 @@ import time
 import sys
 sys.path.append("../../")
 import util.DbReboot as Reboot
-from util.StringUtil import *
+from util.RedisUtil import *
 reload(sys)
 sys.setdefaultencoding('utf8')
 
+from util.LogByDb import *
+
+global windowCount
+windowCount = 0
 
 class BaiduSayHello:
-    global windowCount
-    windowCount = 0
-
     def hello(sa, ip):
         global windowCount
-        windowCount = 0
+        log = LogByDb()
+        logtype ='101'
         # while 1:
         windowCount += 1
-        print '打开窗口:' + str(windowCount)
+        logstr = '打开窗口:' + str(windowCount)
+        print logstr
+        log.write(logstr,ip,logtype)
         chromeOptions = webdriver.ChromeOptions()
         # 设置代理
         # 一定要注意，=两边不能有空格，不能是这样--proxy-server = http://202.20.16.82:10152
@@ -36,13 +40,17 @@ class BaiduSayHello:
 
         try:
             driver.get(
-                "http://p.qiao.baidu.com//im/index?siteid=7956642&ucid=7729658")
+                "http://p.qiao.baidu.com/cps/chatIndex?reqParam=%7B%22from%22%3A0%2C%22sid%22%3A%22-100%22%2C%22tid%22%3A%22-1%22%2C%22ttype%22%3A1%2C%22siteId%22%3A%2211046280%22%2C%22userId%22%3A%2224329972%22%2C%22pageId%22%3A0%7D")
         except Exception, e:
-            print '加载会话错误。。关闭窗口'
+            logstr='会话关闭，窗口关闭'+str(e)
+            print logstr, e
+            log.write(logstr,ip,logtype)
+            print ''
             try:
                 driver.quit()
+                return
             except Exception, e:
-                print '关闭窗口错误...'
+                print '关闭窗口错误...', e
             return
         print '窗口已打开'
         # 获取打开的多个窗口句柄
@@ -63,29 +71,37 @@ class BaiduSayHello:
             except Exception, e:
                 print e
                 continue
-            lastContent = d('.msg-sub:last .title').text();
-            if lastMsg != lastContent:
+            lastContent = d('.msg-sub:last .content').text();
+            if lastMsg != lastContent or (sessionTime > 30 and sessionTime % 10 == 0):
                 lastMsg = lastContent
-                print '有新的客户消息。。。'
-                print '客服说：' + lastContent
+                logstr ='客服说：' + lastContent
+                print logstr
+                log.write(logstr,ip,logtype)
                 reboot = Reboot.DbReboot()
-                tulingSayMsg = reboot.robootSay(lastContent)
+                tulingSayMsg = reboot.robootSay(lastContent, ip)
                 addWeixin = False
-                if sessionTime > 60:
-                    tulingSayMsg = '您加我微信详聊吧 ：' + MyUtil.createPhone()
+                if int(r.get(ip)) > 4:
                     addWeixin = True
                 driver.execute_script(
                     "document.getElementById('editor').innerHTML='" + tulingSayMsg + "'")
                 send = driver.find_element_by_id('send-wrap')
                 send.click()
+                logstr ='回复：'+tulingSayMsg
+                print logstr
+                log.write(logstr,ip,logtype)
                 if addWeixin:
                     time.sleep(i)
-                    print '客服回复及时，1分钟内关闭会话...'
+                    logstr ='聊天完成，关闭窗口'
+                    print logstr
+                    log.write(logstr,ip,logtype)
                     driver.quit()
                     break
             else:
                 if sessionTime > 300:
-                    print '回话超过5分钟 关闭当前会话..'
+                    time.sleep(i)
+                    logstr ='回话超过5分钟 关闭当前会话..'
+                    print logstr
+                    log.write(logstr,ip,logtype)
                     driver.quit()
                     break
                     # continue

@@ -15,3 +15,12 @@ Linux下，把下载好的文件放在 /usr/bin 目录下就可以了。
 
 3.linux命令行下运行:
 https://blog.testproject.io/2018/02/20/chrome-headless-selenium-python-linux-servers/
+
+4.开启 abcbabyvip.com 自动聊天
+python talk/StartKuaiShang.py
+5.开启 baby.mifujiaer.com 自动聊天
+python talk/StartBaidu.py
+6.开启 abcbabyvip.com 电话回拨
+python submit/AbcbabyvipSubmit.py  
+7.开启 baby.mifujiaer.com 电话回拨
+python submit/Mifujiaer.py

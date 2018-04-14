@@ -9,21 +9,26 @@ from pyquery import PyQuery as pq
 import time
 import sys
 sys.path.append("../../")
-import util.TulingReboot as Reboot
 import util.StringUtil as StringUtil
 reload(sys)
 sys.setdefaultencoding('utf8')
+import util.DbReboot as Reboot
+from util.RedisUtil import *
+from util.LogByDb import *
 
+global windowCount
+windowCount = 0
 
 class KuaiShangSayHello:
-    global windowCount
-    windowCount = 0
-
     def hello(sa, ip):
-        # while 1:
         global windowCount
         windowCount += 1
-        print '打开窗口:' + str(windowCount)
+        log = LogByDb()
+        logtype ='102'
+        logstr = '打开窗口:' + str(windowCount)
+        print logstr
+        log.write(logstr,ip,logtype)
+
         chromeOptions = webdriver.ChromeOptions()
         # 设置代理
         # 一定要注意，=两边不能有空格，不能是这样--proxy-server = http://202.20.16.82:10152
@@ -40,17 +45,17 @@ class KuaiShangSayHello:
         driver = webdriver.Chrome(chrome_options=chromeOptions)
 
         # driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(10))
-
         # driver.set_timeout(30)
         # driver.implicitly_wait(30)
-        driver.set_page_load_timeout(30)
-        driver.set_script_timeout(30)
+        # driver.set_page_load_timeout(30)
+        # driver.set_script_timeout(30)
 
         url = "http://kf9.kuaishang.cn/bs/im.htm?cas=55798___737336&fi=64318&dp=http://www.abcbabyvip.com/"
+
         try:
             driver.get(url)
         except Exception, e:
-            print '加载会话ee。关闭窗口'
+            print '加载会话。关闭窗口'
             print e
             try:
                 print '等待会话.ex.10'
@@ -84,24 +89,34 @@ class KuaiShangSayHello:
                 print e
                 continue
             lastContent = d('.msg_cs:last .msg').text();
-            if lastMsg != lastContent:
+            if lastMsg != lastContent  or (sessionTime > 30 and sessionTime % 10 == 0):
                 lastMsg = lastContent
-                print '有新的客户消息:'
-                print '客服说：' + lastContent
-                #reboot = Reboot.TulingReboot()
-                #tulingSayMsg = reboot.robootSay(lastContent)
-                #addWeixin = False
-                # if sessionTime > 1:
-                tulingSayMsg = '我手机,同微信 ：' + StringUtil.MyUtil.createPhone()
-                addWeixin = True
-                print '回复：' + tulingSayMsg
-                driver.execute_script(
-                    "document.getElementById('ksEditInstance').innerHTML='" + tulingSayMsg + "'")
-                send = driver.find_element_by_id('ksDirSendBtn')
-                send.click()
+                logstr = '客服说：' + lastContent
+                print logstr
+                log.write(logstr,ip,logtype)
+                reboot = Reboot.DbReboot()
+                tulingSayMsg = reboot.robootSay(lastContent, ip)
+                addWeixin = False
+                if int(r.get(ip)) > 4:
+                    addWeixin = True
+                try:
+                    driver.execute_script(
+                        "document.getElementById('ksEditInstance').innerHTML='" + tulingSayMsg + "'")
+                    send = driver.find_element_by_id('ksDirSendBtn')
+                    send.click()
+                except Exception, e:
+                    logstr ='客户关闭会话，关闭窗口..'
+                    print logstr
+                    log.write(logstr,ip,logtype)
+                    return
+                logstr ='回复：'+tulingSayMsg
+                print logstr
+                log.write(logstr,ip,logtype)
                 if addWeixin:
                     time.sleep(i)
-                    print '客服回复及时，1分钟内关闭会话...'
+                    logstr ='聊天完成，关闭窗口'
+                    print logstr
+                    log.write(logstr,ip,logtype)
                     driver.quit()
                     break
             else:
@@ -113,5 +128,9 @@ class KuaiShangSayHello:
                     send = driver.find_element_by_id('ksDirSendBtn')
                     send.click()
                     driver.quit()
+                    time.sleep(i)
+                    logstr ='回话超过5分钟 关闭当前会话..'
+                    print logstr
+                    log.write(logstr,ip,logtype)
                     break
                     # continue

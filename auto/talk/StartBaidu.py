@@ -9,13 +9,21 @@ from pyquery import PyQuery as pq
 import time
 import sys
 sys.path.append("../../")
-import util.TulingReboot as tuling
-from util.StringUtil import *
 from util.IpUtil import *
 from auto.talk.BaiduSayHello import *
+from util.RedisUtil import *
+from util.LogByDb import *
 
-# IpUtils.saveIp()
+
 while 1:
+    if r.get("CRAWLER_OC_3_1")!='1' :
+        log = LogByDb()
+        logtype ='104'
+        logstr = '百度（mifujiaer.com）自动聊天已停止...'
+        print logstr
+        log.write(logstr,'',logtype)
+        time.sleep(30)
+        continue
     ip = str(IpUtils.getIp())
     if ip == '-1':
         print 'ip不够了.....'
