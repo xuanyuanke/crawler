@@ -1,24 +1,27 @@
 #coding=utf-8
 from selenium import webdriver
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.common.by import By
 import time
-dcap = dict(DesiredCapabilities.PHANTOMJS)
-dcap["phantomjs.page.settings.userAgent"] = (
-"Mozilla/5.0 (Linux; Android 5.1.1; Nexus 6 Build/LYZ28E) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.23 Mobile Safari/537.36 Content-Type: application/x-www-form-urlencoded;charset=utf-8"
-)
-obj = webdriver.PhantomJS(desired_capabilities=dcap)
 
 
-obj.get('http://www.baidu.com')
-time.sleep(5)
-print obj
-obj.find_element_by_id('kw').send_keys("aaa")                    #通过ID定位
-print(1111)
-data = obj.find_element_by_class_name('s_ipt')         #通过class属性定位
-obj.find_element_by_name('wd')                  #通过标签name属性定位
-obj.find_element_by_tag_name('input')           #通过标签属性定位
-obj.find_element_by_css_selector('#kw')         #通过css方式定位
-obj.find_element_by_xpath("//input[@id='kw']")  #通过xpath方式定位
-obj.find_element_by_link_text(u"贴吧")           #通过xpath方式定位
-    
-print obj.find_element_by_id('kw').tag_name   #获取标签的类型
+chrome_options = Options()
+                        # chrome_options.add_argument('window-size=1920x3000') #指定浏览器分辨率
+                        # chrome_options.add_argument('--disable-gpu') #谷歌文档提到需要加上这个属性来规避bug
+                        # chrome_options.add_argument('--hide-scrollbars') #隐藏滚动条, 应对一些特殊页面
+                        # chrome_options.add_argument('blink-settings=imagesEnabled=false') #不加载图片, 提升速度
+                        # proxy="--proxy-server=http://" + ip
+                        # addargument['--headless',proxy]
+
+chrome_options.add_argument('--disable-extensions')
+chrome_options.add_argument('--disable-gpu')
+chrome_options.add_argument('--no-sandbox')
+chrome_options.add_argument('--headless') #浏览器不提供可视化页面. linux下如果系统不支持可视化不加这条会启动失败
+driver = webdriver.Chrome('/usr/local/bin/chromedriver',chrome_options=chrome_options)
+driver.get("https://www.baidu.com")
+driver.set_page_load_timeout(20)
+print driver.page_source
+driver.quit()

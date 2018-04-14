@@ -34,7 +34,7 @@ class IpUtils:
 
     global getIpUrl, filePath
     # 代理ip获取的URL
-    getIpUrl = "http://tvp.daxiangdaili.com/ip/?tid=555447088680131&num=20&delay=1&filter=on"
+    getIpUrl = "http://tvp.daxiangdaili.com/ip/?tid=555447088680131&num=1000&delay=1&filter=on"
     # 文件的保存路径
     project_dir = os.path.dirname(os.path.abspath(""))
     filePath = "/tmp/ip.txt"

@@ -12,9 +12,9 @@ import os
 #IpUtils.saveIp()
 while 1:
 	try:
-		time.sleep(60*10)
 		print '准备执行'
 		os.system(" sh stopchrome.sh ")
+		time.sleep(60*10)
 	except Exception as e:
 		e
 	finally:
