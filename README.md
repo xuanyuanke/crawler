@@ -1,5 +1,7 @@
 # crawler
 
+###### https://github.com/xuanyuanke/crawler/blob/master/README.md
+
 ## 爬虫测试
 
 >sudo easy_install pip   
@@ -70,4 +72,15 @@ sudo pip install pymysql
 >chrome_options.add_argument('--disable-extensions')    
 chrome_options.add_argument('--disable-gpu')    
 chrome_options.add_argument('--no-sandbox')    
-chrome_options.add_argument('--headless')     
+chrome_options.add_argument('--headless')
+
+### 8、聊天和回拨
+开启 abcbabyvip.com 自动聊天    
+python talk/StartKuaiShang.py    
+开启 baby.mifujiaer.com 自动聊天    
+python talk/StartBaidu.py    
+开启 abcbabyvip.com 电话回拨    
+python submit/AbcbabyvipSubmit.py      
+开启 baby.mifujiaer.com 电话回拨    
+python submit/Mifujiaer.py  
+     
