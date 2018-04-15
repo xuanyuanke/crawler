@@ -19,7 +19,9 @@ try:
 	cookie= driver.get_cookies()
 	driver.find_element_by_id("kw").send_keys(word)
 	driver.find_element_by_id("su").click()
-				# time.sleep(5)
+	time.sleep(8)
+	js="var q=document.documentElement.scrollTop=10000"
+	driver.execute_script(js)
 	try:
 		url = driver.find_element_by_partial_link_text(str(name)).get_attribute('href')
 		print url

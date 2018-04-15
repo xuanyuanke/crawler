@@ -9,6 +9,8 @@ dcap["phantomjs.page.settings.userAgent"] = (
 obj = webdriver.PhantomJS(desired_capabilities=dcap)
 obj.get('http://www.baidu.com')
 obj.set_page_load_timeout(5)
+js="var q=document.documentElement.scrollTop=10000"
+driver.execute_script(js)
 try:
     print obj.find_element_by_id('ftConw').text
     obj.find_element_by_id('kw').send_keys("aaa")                    #通过ID定位
