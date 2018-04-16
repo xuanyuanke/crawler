@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 import sys
-sys.path.append("../../")
+sys.path.append("../")
 from util.StringUtil import *
 from util.IpUtil import *
 reload(sys)

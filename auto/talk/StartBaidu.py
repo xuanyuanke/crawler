@@ -8,9 +8,9 @@ from selenium.webdriver.common.by import By
 from pyquery import PyQuery as pq
 import time
 import sys
-sys.path.append("../../")
+sys.path.append("../")
 from util.IpUtil import *
-from auto.talk.BaiduSayHello import *
+from BaiduSayHello import *
 from util.RedisUtil import *
 from util.LogByDb import *
 
