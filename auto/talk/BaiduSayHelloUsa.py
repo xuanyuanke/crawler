@@ -19,11 +19,11 @@ from util.LogByDb import *
 global windowCount
 windowCount = 0
 
-class BaiduSayHelloJiiaa:
+class BaiduSayHelloUsa:
     def hello(sa, ip):
         global windowCount
         log = LogByDb()
-        logtype ='108'
+        logtype ='109'
         # while 1:
         windowCount += 1
         logstr = '打开窗口:' + str(windowCount)
@@ -40,7 +40,7 @@ class BaiduSayHelloJiiaa:
 
         try:
             driver.get(
-                "http://p.qiao.baidu.com/cps/chat?siteId=11798965&userId=25201006")
+                "http://p.qiao.baidu.com//im/index?siteid=7956642&ucid=7729658")
         except Exception, e:
             logstr='会话关闭，窗口关闭'+str(e)
             print logstr, e
