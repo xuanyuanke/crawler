@@ -1,16 +1,9 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-from pyquery import PyQuery as pq
-import time
 import sys
-sys.path.append("../")
+sys.path.append("../../")
 from util.IpUtil import *
-from auto.talk.BaiduSayHelloUsa import *
+from BaiduSayHelloUsa import *
 from util.RedisUtil import *
 from util.LogByDb import *
 

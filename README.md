@@ -8,7 +8,10 @@
 >sudo pip install selenium    
 >sudo  pip install pyquery   
 >sudo pip install requests    
->sudo pip install pymysql   
+>sudo pip install pymysql
+>sudo pip install redis  
+   
+
 
 ### 1. 配置yum下载源：
 
@@ -74,13 +77,15 @@ chrome_options.add_argument('--disable-gpu')
 chrome_options.add_argument('--no-sandbox')    
 chrome_options.add_argument('--headless')
 
-### 8、聊天和回拨
+### 8、聊天和回拨 进入 相应目录后操作
 开启 abcbabyvip.com 自动聊天    
-python talk/StartKuaiShang.py    
+python StartKuaiShang.py    
 开启 baby.mifujiaer.com 自动聊天    
-python talk/StartBaidu.py    
+python StartBaidu.py    
+开启 angel-usa 自动聊天    
+python StartBaiduUsa.py
 开启 abcbabyvip.com 电话回拨    
-python submit/AbcbabyvipSubmit.py      
+python AbcbabyvipSubmit.py      
 开启 baby.mifujiaer.com 电话回拨    
-python submit/Mifujiaer.py  
+python Mifujiaer.py  
      

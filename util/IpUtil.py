@@ -34,7 +34,9 @@ class IpUtils:
 
     global getIpUrl, filePath
     # 代理ip获取的URL
-    getIpUrl = "http://tvp.daxiangdaili.com/ip/?tid=555447088680131&num=1000&delay=1&filter=on"
+    getIpUrl = "http://tvp.daxiangdaili.com/ip/?tid=555447088680131&num=10&delay=1&filter=on"
+    #getIpUrl="http://piping.mogumiao.com/proxy/api/get_ip_bs?appKey=b7b6e615d8f348a29fe4afd38ad17642&count=5&expiryDate=5&format=2"
+
     # 文件的保存路径
     project_dir = os.path.dirname(os.path.abspath(""))
     filePath = "/tmp/ip.txt"
@@ -44,6 +46,10 @@ class IpUtils:
         try:
             print '开始重新拉取ip....'
             chrome_options = webdriver.ChromeOptions()
+            chrome_options.add_argument('--headless')
+            chrome_options.add_argument('--disable-extensions')
+            chrome_options.add_argument('--disable-gpu')
+            chrome_options.add_argument('--no-sandbox')
             chrome_options.add_argument('--headless')
             #driver = webdriver.Chrome('/usr/local/bin/chromedriver',chrome_options=chrome_options)
             driver = webdriver.Chrome(chrome_options=chrome_options)
@@ -130,3 +136,5 @@ class IpUtils:
 
         lines = [line.decode('utf-8') for line in inf.readlines()]
         return lines
+
+IpUtils.saveIp()

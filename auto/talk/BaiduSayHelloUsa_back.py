@@ -49,8 +49,9 @@ class BaiduSayHelloUsa:
         driver.set_page_load_timeout(50)
 
         try:
+
             driver.get(
-                "http://p.qiao.baidu.com/cps2/chatIndex?reqParam=%7B%22from%22%3A0%2C%22sid%22%3A%22-100%22%2C%22tid%22%3A%22-1%22%2C%22ttype%22%3A1%2C%22siteId%22%3A%225472830%22%2C%22userId%22%3A%227729658%22%2C%22pageId%22%3A0%7D")
+                "http://www.angel-usa.com/")
         except Exception, e:
             logstr='会话关闭，窗口关闭'+str(e)
             print logstr, e
@@ -63,12 +64,12 @@ class BaiduSayHelloUsa:
                 print '关闭窗口错误...', e
             return
         print '窗口已打开'
-        # send = driver.find_element_by_class_name('nb-icon-inner-wrap')
-        # send.click()
+        send = driver.find_element_by_class_name('nb-icon-inner-wrap')
+        send.click()
         # 获取打开的多个窗口句柄
-        # windows = driver.window_handles
+        windows = driver.window_handles
         # 切换到当前最新打开的窗口
-        # driver.switch_to.window(windows[-1])
+        driver.switch_to.window(windows[-1])
 
         i = 0
         sessionTime = 0
