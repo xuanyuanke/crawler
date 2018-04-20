@@ -59,15 +59,15 @@ https://blog.testproject.io/2018/02/20/chrome-headless-selenium-python-linux-ser
 ### 5、下载驱动
 
 > wget https://chromedriver.storage.googleapis.com/2.36/chromedriver_linux64.zip 
-> 
-Linux下，把下载好的文件放在 /usr/bin 目录下就可以了。
+> Linux下，把下载好的文件放在 /usr/bin 目录下就可以了。
 
 
 ### 6、安装其他包依赖
 >sudo pip install selenium   
-sudo pip install pyquery   
-sudo pip install requests    
-sudo pip install pymysql    
+>sudo pip install pyquery   
+>sudo pip install requests    
+>sudo pip install pymysql    
+>sudo pip install redis
 
 
 ### 7、问题：
